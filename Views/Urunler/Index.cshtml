@@ -1,0 +1,154 @@
+﻿ @model List<StokTakip.Services.UrunServisi.ProductDetailViewModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Listesi</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <a asp-action="Create" asp-controller="Urunler">Yeni Ürün Ekle</a>
+    </div>
+    <div class="container mt-3">
+        <h2>Ürün Listesi</h2>
+        <form id="searchForm" class="form-inline mb-3">
+            <input type="text" id="searchInput" class="form-control mr-sm-2" placeholder="Ürün Kodunu Girin">
+            <button type="button" id="searchButton" class="btn btn-primary">Ara</button>
+        </form>
+
+        <table class="table table-bordered" id="productTable">
+            <thead>
+                <tr>
+                    <th>Ürün Kodu</th>
+                    <th>Ürün Adı</th>
+                    <th>Renk</th>
+                    <th>Uzunluk</th>
+                    <th>Stok Adeti</th>
+                    <th>Ekleme Tarihi</th>
+                    <th>Güncellenme Tarihi</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.ProductCode</td>
+                        <td>@product.Name</td>
+                        <td>@product.Color</td>
+                        <td>@product.Length</td>
+                        <td>@product.Quantity</td>
+                        <td>@product.CreateDate.ToString("dd.MM.yyyy")</td>
+                        <td>@product.UpdateDate.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            <a asp-action="Detail" asp-route-productCode="@product.ProductCode">Detay</a>
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-route-productCode="@product.ProductCode">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Stok Grafiği</h5>
+            <canvas id="stockChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        $('#searchButton').click(function () {
+            var productCode = $('#searchInput').val();
+            $.ajax({
+                url: '@Url.Action("SearchByProductCode", "Urunler")',
+                method: 'GET',
+                data: { productCode: productCode },
+                success: function (data) {
+                    var tableBody = $('#productTable tbody');
+                    tableBody.empty();
+
+                    if (Array.isArray(data)) {
+                        data.forEach(function (product) {
+                            tableBody.append(
+                                `<tr>
+                                                          <td>${product.productCode}</td>
+                                                          <td>${product.name}</td>
+                                                          <td>${product.color}</td>
+                                                          <td>${product.length}</td>
+                                                          <td>${product.quantity}</td>
+                                                          <td>${new Date(product.createDate).toLocaleDateString()}</td>
+                                                          <td>${new Date(product.updateDate).toLocaleDateString()}</td>
+                                                          <td><a href="@Url.Action("Detail", "Urunler")?productCode=${product.productCode}">Detay</a></td>
+                                                          <td><a href="@Url.Action("Delete", "Urunler")?productCode=${product.productCode}">Sil</a></td>
+                                                      </tr>`
+                            );
+                        });
+                    } else if (data) {
+                        // Tek bir ürün dönerse doğrudan data kullanabiliriz
+                        tableBody.append(
+                            `<tr>
+                                                      <td>${data.productCode}</td>
+                                                      <td>${data.name}</td>
+                                                      <td>${data.color}</td>
+                                                      <td>${data.length}</td>
+                                                      <td>${data.quantity}</td>
+                                                      <td>${new Date(data.createDate).toLocaleDateString()}</td>
+                                                      <td>${new Date(data.updateDate).toLocaleDateString()}</td>
+                                                      <td><a href="@Url.Action("Detail", "Urunler")?productCode=${data.productCode}">Detay</a></td>
+                                                      <td><a href="@Url.Action("Delete", "Urunler")?productCode=${data.productCode}">Sil</a></td>
+                                                  </tr>`
+                        );
+                    }
+                },
+                error: function (error) {
+                    console.error("Hata: ", error);
+                }
+            });
+
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetProductStocks", "Urunler")',
+            method: 'GET',
+            success: function (data) {
+                console.log(data);
+
+                var ctx = document.getElementById('stockChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(d => d.name),
+                        datasets: [{
+                            label: 'Miktar',
+                            data: data.map(d => d.quantity),
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            },
+            error: function (error) {
+                console.error("Hata: ", error);
+            }
+        });
+        
+    </script>
+</body>
+</html>

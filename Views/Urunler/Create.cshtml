@@ -1,0 +1,51 @@
+﻿@model StokTakip.Models.Urunler
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Ürün Ekle</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-3">
+        <h2>Yeni Ürün Ekle</h2>
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success">@ViewBag.SuccessMessage</div>
+        }
+        <form asp-controller="Urunler" asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="UrunKodu">Ürün Kodu</label>
+                <input asp-for="UrunKodu" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="UrunAdi">Ürün Adı</label>
+                <input asp-for="UrunAdi" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Aciklama">Ürün Açıklaması</label>
+                <input asp-for="Aciklama" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Renk">Renk</label>
+                <input asp-for="Renk" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Uzunluk">Uzunluk</label>
+                <input asp-for="Uzunluk" class="form-control" />
+            </div>
+            <div>
+                <label asp-for="StokKodu">Stok Kodu</label>
+                <input asp-for="StokKodu" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="StokAdeti">Stok Adeti</label>
+                <input asp-for="StokAdeti" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+    </div>
+</body>
+</html>

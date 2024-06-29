@@ -1,0 +1,137 @@
+﻿@model StokTakip.Models.Kullanici
+
+@{
+    ViewData["Title"] = "Login and Register";
+}
+<style>
+    .login-container{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+.login-form-1{
+    padding: 5%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.login-form-1 h3{
+    text-align: center;
+    color: #333;
+}
+.login-form-2{
+    padding: 5%;
+    background: #0062cc;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.login-form-2 h3{
+    text-align: center;
+    color: #fff;
+}
+.login-container form{
+    padding: 10%;
+}
+.btnSubmit
+{
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+}
+.login-form-1 .btnSubmit{
+    font-weight: 600;
+    color: #fff;
+    background-color: #0062cc;
+}
+.login-form-2 .btnSubmit{
+    font-weight: 600;
+    color: #0062cc;
+    background-color: #fff;
+}
+.login-form-2 .ForgetPwd{
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+.login-form-1 .ForgetPwd{
+    color: #0062cc;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+</style>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container login-container">
+    <div class="row">
+        <div class="col-md-6 login-form-1">
+            <h3>Login</h3>
+            <form asp-action="Giris" asp-controller="Kullanici" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="KullaniciAdi" class="form-control" placeholder="Your Username *" />
+                    <span asp-validation-for="KullaniciAdi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Sifre" type="password" class="form-control" placeholder="Your Password *" />
+                    <span asp-validation-for="Sifre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                
+            </form>
+        </div>
+        <div class="col-md-6 login-form-2">
+            <h3>Register</h3>
+            <form asp-action="Kayit" asp-controller="Kullanici" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Isim" class="form-control" placeholder="Your Name *" />
+                    <span asp-validation-for="Isim" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Soyisim" class="form-control" placeholder="Your Surname *" />
+                    <span asp-validation-for="Soyisim" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="KullaniciAdi" class="form-control" placeholder="Username *" />
+                    <span asp-validation-for="KullaniciAdi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Sifre" type="password" class="form-control" placeholder="Password *" />
+                    <span asp-validation-for="Sifre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Mail" class="form-control" placeholder="Your Email *" />
+                    <span asp-validation-for="Mail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <select class="form-control">
+                        @foreach (var userType in Enum.GetValues(typeof(KullaniciTuru)))
+                        {
+                            <option>@userType</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Kayıt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.SuccessMessage
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <p class="error">@ViewBag.ErrorMessage</p>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+}

@@ -1,0 +1,39 @@
+﻿@model  StokTakip.Services.UrunServisi.ProductDetailViewModel
+@{
+    ViewData["Title"] = "Ürün Detayı ve Güncelleme";
+}
+
+<h1>Ürün Detayı ve Güncelleme</h1>
+
+<form asp-controller="Urunler" asp-action="Update" method="post">
+    <div class="form-group">
+        <label asp-for="ProductCode">Ürün Kodu</label>
+        <input asp-for="ProductCode" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Name">Ürün Adı</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Color">Renk</label>
+        <input asp-for="Color" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Length">Uzunluk</label>
+        <input asp-for="Length" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Quantity">Stok Adeti</label>
+        <input asp-for="Quantity" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CreateDate">İlk Ekleme Tarihi</label>
+        <input asp-for="CreateDate" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="UpdateDate">Son Güncelleme Tarihi</label>
+        <input asp-for="UpdateDate" class="form-control" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>
